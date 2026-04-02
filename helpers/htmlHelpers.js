@@ -74,7 +74,7 @@ function getSelectOptions(options, selected = '') {
 }
 
 function getProductForm(product = null) {
-  const { validCategories, validSizes } = require('../models/Poduct');
+  const { validCategories, validSizes } = require('../models/Product');
   const isEdit = product !== null;
   const action = isEdit ? `/dashboard/${product._id}?_method=PUT` : '/dashboard';
 

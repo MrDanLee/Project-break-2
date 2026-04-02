@@ -5,6 +5,7 @@ const session = require("express-session");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+
 dbConnection();
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");

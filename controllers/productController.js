@@ -1,4 +1,4 @@
-const Product = require("../models/Poduct");
+const Product = require("../models/Product");
 const {
   baseHtml,
   closeHtml,

@@ -1,13 +1,20 @@
-const express = require('express');
-const { prototype } = require('node:events');
+require("dotenv").config();
+const express = require("express");
 const app = express();
-const PORT = process.env.PORT || 8001;
+const PORT = process.env.PORT || 3000;
 
+const productRoutes = require("./routes/productRoutes");
 
-app.use('/', (req, res) => {
-  res.send('Hello world');
-});
+// Middlewares para leer el body de formularios y JSON
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+// Archivos estáticos (CSS, imágenes, etc.)
+app.use(express.static("public"));
+
+// Rutas
+app.use("/", productRoutes);
 
 app.listen(PORT, () => {
-  console.log(`Server started on port http://localhost:${PORT}`);
+  console.log(`Server started on http://localhost:${PORT}`);
 });

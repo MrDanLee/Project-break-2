@@ -35,7 +35,7 @@ function getProductCards(products, isDashboard = false) {
         <a href="${isDashboard ? '/dashboard' : '/products'}/${product._id}">Ver detalle</a>
         ${isDashboard ? `
           <a href="/dashboard/${product._id}/edit">Editar</a>
-          <form action="/dashboard/${product._id}/delete" method="POST">
+          <form action="/dashboard/${product._id}/delete?_method=DELETE" method="POST">
             <button type="submit">Eliminar</button>
           </form>
         ` : ''}
@@ -81,7 +81,7 @@ function getProductForm(product = null) {
   return `
     <div class="product-form">
       <h1>${isEdit ? 'Editar Producto' : 'Nuevo Producto'}</h1>
-      <form action="${action}" method="POST">
+      <form action="${action}" method="POST" enctype="multipart/form-data">
         <label for="name">Nombre</label>
         <input type="text" name="name" id="name" value="${isEdit ? product.name : ''}" required>
 
@@ -91,8 +91,9 @@ function getProductForm(product = null) {
         <label for="price">Precio (€)</label>
         <input type="number" name="price" id="price" step="0.01" min="0" value="${isEdit ? product.price : ''}" required>
 
-        <label for="image">URL de imagen</label>
-        <input type="text" name="image" id="image" value="${isEdit ? product.image : ''}">
+        <label for="image">Imagen</label>
+        ${isEdit && product.image ? `<img src="${product.image}" alt="${product.name}" width="100">` : ''}
+        <input type="file" name="image" id="image" accept="image/*" ${isEdit ? '' : 'required'}>
 
         <label for="category">Categoría</label>
         <select name="category" id="category" required>

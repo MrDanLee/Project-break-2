@@ -61,7 +61,11 @@ const showNewProduct = async (req, res) => {
 // POST /dashboard
 const createProduct = async (req, res) => {
   try {
-    const product = await Product.create(req.body);
+    const productData = { ...req.body };
+    if (req.file) {
+      productData.image = "/images/" + req.file.filename;
+    }
+    const product = await Product.create(productData);
     res.redirect("/dashboard/" + product._id);
   } catch (error) {
     res.status(500).send("Error al crear el producto");
@@ -89,9 +93,13 @@ const showEditProduct = async (req, res) => {
 // PUT /dashboard/:productId
 const updateProduct = async (req, res) => {
   try {
+    const productData = { ...req.body };
+    if (req.file) {
+      productData.image = "/images/" + req.file.filename;
+    }
     const product = await Product.findByIdAndUpdate(
       req.params.productId,
-      req.body,
+      productData,
       { new: true }
     );
     if (!product) {

@@ -65,7 +65,16 @@ function getProductDetail(product, isDashboard = false) {
   `;
 }
 
+function getSelectOptions(options, selected = '') {
+  let html = '<option value="">— Selecciona —</option>';
+  for (let option of options) {
+    html += `<option value="${option}"${option === selected ? ' selected' : ''}>${option}</option>`;
+  }
+  return html;
+}
+
 function getProductForm(product = null) {
+  const { validCategories, validSizes } = require('../models/Poduct');
   const isEdit = product !== null;
   const action = isEdit ? `/dashboard/${product._id}?_method=PUT` : '/dashboard';
 
@@ -79,14 +88,21 @@ function getProductForm(product = null) {
         <label for="description">Descripción</label>
         <textarea name="description" id="description" required>${isEdit ? product.description : ''}</textarea>
 
-        <label for="price">Precio</label>
-        <input type="number" name="price" id="price" step="0.01" value="${isEdit ? product.price : ''}" required>
+        <label for="price">Precio (€)</label>
+        <input type="number" name="price" id="price" step="0.01" min="0" value="${isEdit ? product.price : ''}" required>
 
         <label for="image">URL de imagen</label>
         <input type="text" name="image" id="image" value="${isEdit ? product.image : ''}">
 
         <label for="category">Categoría</label>
-        <input type="text" name="category" id="category" value="${isEdit ? product.category : ''}">
+        <select name="category" id="category" required>
+          ${getSelectOptions(validCategories, isEdit ? product.category : '')}
+        </select>
+
+        <label for="size">Talla</label>
+        <select name="size" id="size" required>
+          ${getSelectOptions(validSizes, isEdit ? product.size : '')}
+        </select>
 
         <button type="submit">${isEdit ? 'Actualizar' : 'Crear'}</button>
       </form>

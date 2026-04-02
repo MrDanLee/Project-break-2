@@ -1,36 +1,40 @@
 const mongoose = require('mongoose');
 
+const validCategories = ['Camisetas', 'Pantalones', 'Zapatos', 'Accesorios', 'Abrigos'];
+const validSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+
 const ProductSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    default: "Unnamed product"
   },
   description: {
     type: String,
     required: true,
-    default: "Product description"
   },
   image: {
     type: String,
     required: true,
-    default: "Product image"
   },
   category: {
     type: String,
     required: true,
-    default: "Product category"
+    enum: validCategories,
   },
   size: {
     type: String,
     required: true,
-    default: "Product size"
+    enum: validSizes,
   },
-  prize: {
+  price: {
     type: Number,
     required: true,
-    default: "Product price"
-  } 
-}, { timestamps: true});
+    min: 0,
+  },
+}, { timestamps: true });
 
-module.exports = mongoose.model("Product", ProductSchema);
+const Product = mongoose.model("Product", ProductSchema);
+
+module.exports = Product;
+module.exports.validCategories = validCategories;
+module.exports.validSizes = validSizes;

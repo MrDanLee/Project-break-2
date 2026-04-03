@@ -9,6 +9,7 @@ const PORT = process.env.PORT || 3000;
 dbConnection();
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");
+const apiProductRoutes = require("./routes/apiProductRoutes");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -29,6 +30,7 @@ app.get("/", (req, res) => res.redirect("/products"));
 
 app.use("/", authRoutes);
 app.use("/", productRoutes);
+app.use("/api/products", apiProductRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server started on http://localhost:${PORT}`);

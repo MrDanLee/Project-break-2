@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { showProducts, showProductById, showNewProduct, createProduct, showEditProduct, updateProduct, deleteProduct } = require("../controllers/productController");
 const authMiddleware = require("../middlewares/authMiddleware");
-const upload = require('../middlewares/uploadMiddleware');
+const upload = require('../middlewares/uploadCloudinaryMiddleware');
 
 // Rutas públicas
 router.get("/products", showProducts);

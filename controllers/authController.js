@@ -1,24 +1,26 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
-const { baseHtml, closeHtml, getNavBar } = require("../helpers/htmlHelpers");
+const { baseHtml, closeHtml } = require("../helpers/htmlHelpers");
 
 // GET /login
 const showLogin = (req, res) => {
   const html =
     baseHtml +
-    getNavBar() +
-    `<div class="auth-form">
-      <h1>Iniciar Sesión</h1>
-      <form action="/login" method="POST">
-        <label for="email">Email</label>
-        <input type="email" name="email" id="email" required>
+    `<div class="auth-page">
+      <h1>Login</h1>
+      <div class="form-card">
+        <form action="/login" method="POST">
+          <label for="email">Email:</label>
+          <input type="email" name="email" id="email" required>
 
-        <label for="password">Contraseña</label>
-        <input type="password" name="password" id="password" required>
+          <label for="password">Contraseña:</label>
+          <input type="password" name="password" id="password" required>
 
-        <button type="submit">Entrar</button>
-      </form>
-      <p>¿No tienes cuenta? <a href="/register">Regístrate</a></p>
+          <button class="btn" type="submit">Login</button>
+        </form>
+        <a class="btn" href="/register">Registrarse</a>
+        <a class="btn" href="/products">Atrás</a>
+      </div>
     </div>` +
     closeHtml;
   res.send(html);
@@ -28,22 +30,21 @@ const showLogin = (req, res) => {
 const showRegister = (req, res) => {
   const html =
     baseHtml +
-    getNavBar() +
-    `<div class="auth-form">
-      <h1>Registro</h1>
-      <form action="/register" method="POST">
-        <label for="username">Nombre de usuario</label>
-        <input type="text" name="username" id="username" required>
+    `<div class="auth-page">
+      <h1>Registrarse</h1>
+      <div class="form-card">
+        <form action="/register" method="POST">
+          <label for="email">Email:</label>
+          <input type="email" name="email" id="email" required>
 
-        <label for="email">Email</label>
-        <input type="email" name="email" id="email" required>
+          <label for="password">Contraseña:</label>
+          <input type="password" name="password" id="password" required>
 
-        <label for="password">Contraseña</label>
-        <input type="password" name="password" id="password" required>
-
-        <button type="submit">Registrarse</button>
-      </form>
-      <p>¿Ya tienes cuenta? <a href="/login">Inicia sesión</a></p>
+          <button class="btn" type="submit">Registrarse</button>
+        </form>
+        <a class="btn" href="/login">Login</a>
+        <a class="btn" href="/products">Atrás</a>
+      </div>
     </div>` +
     closeHtml;
   res.send(html);
@@ -52,9 +53,9 @@ const showRegister = (req, res) => {
 // POST /register
 const register = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { email, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-    await User.create({ username, email, password: hashedPassword });
+    await User.create({ email, password: hashedPassword });
     res.redirect("/login");
   } catch (error) {
     res.status(500).send("Error al registrar el usuario");
@@ -73,7 +74,7 @@ const login = async (req, res) => {
     if (!isMatch) {
       return res.status(401).send("Credenciales incorrectas");
     }
-    req.session.user = { id: user._id, username: user.username, email: user.email };
+    req.session.user = { id: user._id, email: user.email };
     res.redirect("/dashboard");
   } catch (error) {
     res.status(500).send("Error al iniciar sesión");

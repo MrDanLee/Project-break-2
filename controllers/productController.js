@@ -8,15 +8,16 @@ const {
   getProductForm,
 } = require("../helpers/htmlHelpers");
 
-// GET /products  y  GET /dashboard
+// GET /products  y  GET /dashboard (con filtrado por categoría)
 const showProducts = async (req, res) => {
   try {
     const isDashboard = req.path.startsWith("/dashboard");
-    const products = await Product.find();
+    const filter = req.query.category ? { category: req.query.category } : {};
+    const products = await Product.find(filter);
     const html =
       baseHtml +
       getNavBar(isDashboard) +
-      `<h1>${isDashboard ? "Dashboard" : "Productos"}</h1>` +
+      `<h1 class="page-title">Productos</h1>` +
       getProductCards(products, isDashboard) +
       closeHtml;
     res.send(html);
@@ -63,7 +64,7 @@ const createProduct = async (req, res) => {
   try {
     const productData = { ...req.body };
     if (req.file) {
-      productData.image = "/images/" + req.file.filename;
+      productData.image = req.file.path;
     }
     const product = await Product.create(productData);
     res.redirect("/dashboard/" + product._id);
@@ -95,7 +96,7 @@ const updateProduct = async (req, res) => {
   try {
     const productData = { ...req.body };
     if (req.file) {
-      productData.image = "/images/" + req.file.filename;
+      productData.image = req.file.path;
     }
     const product = await Product.findByIdAndUpdate(
       req.params.productId,

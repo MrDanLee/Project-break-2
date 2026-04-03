@@ -13,14 +13,19 @@ const baseHtml = `
 const closeHtml = `</body></html>`;
 
 function getNavBar(isDashboard = false) {
-  let nav = `
+  const base = isDashboard ? '/dashboard' : '/products';
+  return `
     <nav>
-      <a href="/products">Productos</a>
-      <a href="/dashboard">Dashboard</a>
-      ${isDashboard ? '<a href="/dashboard/new">+ Nuevo Producto</a>' : ''}
+      <a href="${base}">Productos</a>
+      <a href="${base}?category=Camisetas">Camisetas</a>
+      <a href="${base}?category=Pantalones">Pantalones</a>
+      <a href="${base}?category=Zapatos">Zapatos</a>
+      <a href="${base}?category=Accesorios">Accesorios</a>
+      ${isDashboard
+        ? '<a href="/dashboard/new">Nuevo Producto</a><a href="/logout">Logout</a>'
+        : '<a href="/login">Login</a>'}
     </nav>
   `;
-  return nav;
 }
 
 function getProductCards(products, isDashboard = false) {
@@ -28,17 +33,9 @@ function getProductCards(products, isDashboard = false) {
   for (let product of products) {
     html += `
       <div class="product-card">
-        <img src="${product.image}" alt="${product.name}">
         <h2>${product.name}</h2>
-        <p>${product.description}</p>
-        <p>${product.price}€</p>
-        <a href="${isDashboard ? '/dashboard' : '/products'}/${product._id}">Ver detalle</a>
-        ${isDashboard ? `
-          <a href="/dashboard/${product._id}/edit">Editar</a>
-          <form action="/dashboard/${product._id}/delete?_method=DELETE" method="POST">
-            <button type="submit">Eliminar</button>
-          </form>
-        ` : ''}
+        <img src="${product.image}" alt="${product.name}">
+        <a class="btn" href="${isDashboard ? '/dashboard' : '/products'}/${product._id}">Ver</a>
       </div>
     `;
   }
@@ -49,24 +46,24 @@ function getProductCards(products, isDashboard = false) {
 function getProductDetail(product, isDashboard = false) {
   return `
     <div class="product-detail">
-      <img src="${product.image}" alt="${product.name}">
       <h1>${product.name}</h1>
+      <img src="${product.image}" alt="${product.name}">
       <p>${product.description}</p>
       <p class="price">${product.price}€</p>
       <p>Categoría: ${product.category}</p>
+      <p><strong>Talla: ${product.size}</strong></p>
       ${isDashboard ? `
-        <a href="/dashboard/${product._id}/edit">Editar</a>
+        <a class="btn" href="/dashboard/${product._id}/edit">Editar</a>
         <form action="/dashboard/${product._id}/delete?_method=DELETE" method="POST">
-          <button type="submit">Eliminar</button>
+          <button class="btn" type="submit">Borrar</button>
         </form>
       ` : ''}
-      <a href="${isDashboard ? '/dashboard' : '/products'}">Volver</a>
     </div>
   `;
 }
 
 function getSelectOptions(options, selected = '') {
-  let html = '<option value="">— Selecciona —</option>';
+  let html = '';
   for (let option of options) {
     html += `<option value="${option}"${option === selected ? ' selected' : ''}>${option}</option>`;
   }
@@ -79,35 +76,34 @@ function getProductForm(product = null) {
   const action = isEdit ? `/dashboard/${product._id}?_method=PUT` : '/dashboard';
 
   return `
-    <div class="product-form">
-      <h1>${isEdit ? 'Editar Producto' : 'Nuevo Producto'}</h1>
+    <h1 class="form-title">${isEdit ? 'Editar Producto' : 'Crear Producto'}</h1>
+    <div class="form-card">
       <form action="${action}" method="POST" enctype="multipart/form-data">
-        <label for="name">Nombre</label>
+        <label for="name">Nombre:</label>
         <input type="text" name="name" id="name" value="${isEdit ? product.name : ''}" required>
 
-        <label for="description">Descripción</label>
+        <label for="description">Descripción:</label>
         <textarea name="description" id="description" required>${isEdit ? product.description : ''}</textarea>
 
-        <label for="price">Precio (€)</label>
+        <label for="price">Precio:</label>
         <input type="number" name="price" id="price" step="0.01" min="0" value="${isEdit ? product.price : ''}" required>
 
-        <label for="image">Imagen</label>
-        ${isEdit && product.image ? `<img src="${product.image}" alt="${product.name}" width="100">` : ''}
+        <label for="image">Imagen:</label>
         <input type="file" name="image" id="image" accept="image/*" ${isEdit ? '' : 'required'}>
 
-        <label for="category">Categoría</label>
+        <label for="category">Categoría:</label>
         <select name="category" id="category" required>
           ${getSelectOptions(validCategories, isEdit ? product.category : '')}
         </select>
 
-        <label for="size">Talla</label>
+        <label for="size">Talla:</label>
         <select name="size" id="size" required>
           ${getSelectOptions(validSizes, isEdit ? product.size : '')}
         </select>
 
-        <button type="submit">${isEdit ? 'Actualizar' : 'Crear'}</button>
+        <button class="btn" type="submit">${isEdit ? 'Guardar' : 'Crear'}</button>
       </form>
-      <a href="/dashboard">Cancelar</a>
+      ${isEdit ? '<a class="btn" href="/dashboard">Cancelar</a>' : ''}
     </div>
   `;
 }

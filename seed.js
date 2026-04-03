@@ -15,7 +15,7 @@ const products = [
   {
     name: "Camiseta Negra Premium",
     description: "Camiseta de algodón orgánico con acabado premium.",
-    image: "https://images.unsplash.com/photo-1503341504253-dff4855ab497?w=400",
+    image: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400",
     category: "Camisetas",
     size: "L",
     price: 24.99,
@@ -109,7 +109,7 @@ const products = [
   {
     name: "Gorra Deportiva Negra",
     description: "Gorra ajustable con visera curva, algodón 100%.",
-    image: "https://images.unsplash.com/photo-1588850561407-ed78c334e67a?w=400",
+    image: "https://images.unsplash.com/photo-1556306535-0f09a537f0a3?w=400",
     category: "Accesorios",
     size: "M",
     price: 14.99,

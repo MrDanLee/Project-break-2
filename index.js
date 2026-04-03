@@ -32,6 +32,10 @@ app.use("/", authRoutes);
 app.use("/", productRoutes);
 app.use("/api/products", apiProductRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Server started on http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== "test") {
+  app.listen(PORT, () => {
+    console.log(`Server started on http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;

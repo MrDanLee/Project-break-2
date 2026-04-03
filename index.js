@@ -7,6 +7,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 dbConnection();
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./config/swagger");
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");
 const apiProductRoutes = require("./routes/apiProductRoutes");
@@ -31,6 +33,7 @@ app.get("/", (req, res) => res.redirect("/products"));
 app.use("/", authRoutes);
 app.use("/", productRoutes);
 app.use("/api/products", apiProductRoutes);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 if (process.env.NODE_ENV !== "test") {
   app.listen(PORT, () => {

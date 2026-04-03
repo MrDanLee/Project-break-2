@@ -1,6 +1,8 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 const Product = require("./models/Product");
+const User = require("./models/User");
 
 const products = [
   // --- CAMISETAS ---
@@ -150,6 +152,15 @@ const seedDB = async () => {
 
     await Product.insertMany(products);
     console.log(`${products.length} productos insertados correctamente`);
+
+    // Crear usuario administrador
+    await User.deleteMany({});
+    const hashedPassword = await bcrypt.hash("admin123", 10);
+    await User.create({
+      email: "admin@mail.com",
+      password: hashedPassword,
+    });
+    console.log("Usuario admin creado (admin@mail.com / admin123)");
 
     await mongoose.disconnect();
     console.log("Seed completado");

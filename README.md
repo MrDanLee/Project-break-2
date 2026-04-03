@@ -22,13 +22,10 @@ También expone una API REST que devuelve los datos en formato JSON, pensada par
 
 ## Instalación
 
-```
 npm install
-```
 
 Crear un archivo .env en la raíz con las siguientes variables:
 
-```
 PORT=3000
 MONGO_URI=tu_uri_de_mongo
 SESSION_SECRET=una_cadena_secreta
@@ -37,25 +34,18 @@ ADMIN_PASSWORD=tu_password
 CLOUDINARY_CLOUD_NAME=tu_cloud
 CLOUDINARY_API_KEY=tu_key
 CLOUDINARY_API_SECRET=tu_secret
-```
 
 Poblar la base de datos con productos de ejemplo:
 
-```
 npm run seed
-```
 
 Arrancar en desarrollo:
 
-```
 npm run dev
-```
 
 Arrancar en producción:
 
-```
 npm start
-```
 
 ## Rutas
 
@@ -89,9 +79,7 @@ La documentación interactiva de la API está disponible en /api-docs (Swagger).
 
 ## Tests
 
-```
 npm test
-```
 
 12 tests que cubren las rutas SSR y la API REST. Si fallan probablemente sea por la conexión a la base de datos o porque se ha roto algo.
 
@@ -101,7 +89,6 @@ Desplegado en Render. Cada push a main redespliega automáticamente. Hay que con
 
 ## Estructura del proyecto
 
-```
 ├── config/
 │   ├── cloudinary.js
 │   ├── db.js
@@ -130,4 +117,4 @@ Desplegado en Render. Cada push a main redespliega automáticamente. Hay que con
 ├── index.js
 ├── seed.js
 └── package.json
-```
+
